@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  ASTRO_TELEMETRY_DISABLED: "1"
+
+jobs:
+  build:
+    name: Check, build, and link check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Check
+        run: npx astro check
+
+      - name: Build
+        run: npx astro build
+
+      - name: Check internal links
+        uses: lycheeverse/lychee-action@v2.9.0
+        with:
+          fail: true
+          args: >-
+            --offline
+            --no-progress
+            --root-dir ${{ github.workspace }}/dist
+            --index-files index.html
+            dist

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# TODO: add a Sitemap line after site is set in astro.config.mjs

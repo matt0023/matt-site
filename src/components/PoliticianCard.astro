@@ -1,0 +1,57 @@
+---
+import { formatDate, PARTY_LABELS, type Politician } from "../data/politicians";
+
+interface Props {
+  politician: Politician;
+}
+
+const { politician } = Astro.props;
+const stateHref = `/state/${politician.state.toLowerCase()}`;
+const reasonCount = politician.reasons.length;
+const reasonLabel = reasonCount === 1 ? "1 reason on file" : `${reasonCount} reasons on file`;
+---
+
+<li
+  class="card"
+  data-reveal
+  data-name={politician.name}
+  data-party={politician.party}
+  data-state={politician.state}
+  data-chamber={politician.chamber}
+>
+  <article>
+    <p class="watermark" aria-hidden="true">{politician.state}</p>
+    {
+      politician.example && (
+        <p class="example-flag">Example — not a real politician</p>
+      )
+    }
+    <p class="badges">
+      <span class="badge-party" data-party={politician.party}>
+        {politician.party}
+        <span class="visually-hidden"> {PARTY_LABELS[politician.party]}</span>
+      </span>
+      <a class="badge-state" href={stateHref}>{politician.state}</a>
+    </p>
+    <h2 class="card-title">
+      <a href={`/p/${politician.slug}`}>{politician.name}</a>
+    </h2>
+    <p class="office">
+      {PARTY_LABELS[politician.party]} · {politician.office}
+      {politician.district ? ` · District ${politician.district}` : ""}
+    </p>
+    {
+      politician.xHandle && (
+        <p class="office">
+          <a href={`https://x.com/${politician.xHandle}`} rel="noopener noreferrer">
+            @{politician.xHandle}
+          </a>
+        </p>
+      )
+    }
+    <p class="reason-count">{reasonLabel}</p>
+    <p class="stamp">
+      Updated <time datetime={politician.lastUpdated}>{formatDate(politician.lastUpdated)}</time>
+    </p>
+  </article>
+</li>

@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PoliticianCard from "../components/PoliticianCard.astro";
+import { politiciansInChamber } from "../data/politicians";
+
+const people = politiciansInChamber("senate");
+---
+
+<BaseLayout
+  title="The Senate · America First list"
+  description="Senate case files on the America First list."
+>
+  <section class="page-intro" data-reveal>
+    <p class="kicker">Chamber · Senate</p>
+    <h1>The Senate</h1>
+    <p class="lede">
+      {people.length} {people.length === 1 ? "Senate file" : "Senate files"}. The House docket comes next.
+    </p>
+    <p><a href="/">Back to the full list</a></p>
+    {
+      people.length === 0 ? (
+        <div class="coming-soon">
+          <p class="stamp">Empty</p>
+          <h2>No Senate file yet.</h2>
+        </div>
+      ) : (
+        <ul class="cards">
+          {people.map((politician) => (
+            <PoliticianCard politician={politician} />
+          ))}
+        </ul>
+      )
+    }
+  </section>
+</BaseLayout>

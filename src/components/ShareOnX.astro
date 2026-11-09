@@ -1,0 +1,18 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+const intent = new URL("https://x.com/intent/tweet");
+intent.searchParams.set("text", text);
+---
+
+<a data-share href={intent.href}>Share on X</a>
+<script>
+  for (const link of document.querySelectorAll<HTMLAnchorElement>("a[data-share]")) {
+    const url = new URL(link.href);
+    url.searchParams.set("url", location.href);
+    link.href = url.href;
+  }
+</script>

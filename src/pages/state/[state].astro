@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PoliticianCard from "../../components/PoliticianCard.astro";
+import { politiciansInState, stateName, type StateCode } from "../../data/politicians";
+import { politicians } from "../../data/politicians";
+
+export function getStaticPaths() {
+  const codes = [...new Set(politicians.map((politician) => politician.state))];
+  return codes.map((state) => ({ params: { state: state.toLowerCase() } }));
+}
+
+const param = Astro.params.state;
+if (!param) throw new Error("Missing state");
+const people = politiciansInState(param);
+const code = param.toUpperCase();
+if (people.length === 0) throw new Error(`No entries for state ${param}`);
+const name = stateName(code as StateCode);
+---
+
+<BaseLayout
+  title={`${name} · America First list`}
+  description={`Case files for ${name} on the America First list.`}
+>
+  <section class="page-intro" data-reveal>
+    <p class="kicker">State file · {code}</p>
+    <h1>{name}</h1>
+    <p class="lede">
+      {people.length} {people.length === 1 ? "case file" : "case files"} in {name}.
+    </p>
+    <p><a href="/">Back to the full list</a></p>
+    <ul class="cards">
+      {people.map((politician) => <PoliticianCard politician={politician} />)}
+    </ul>
+  </section>
+</BaseLayout>

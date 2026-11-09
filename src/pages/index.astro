@@ -1,0 +1,173 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PoliticianCard from "../components/PoliticianCard.astro";
+import ShareOnX from "../components/ShareOnX.astro";
+import {
+  CHAMBERS,
+  CHAMBER_LABELS,
+  PARTY_LABELS,
+  PARTIES,
+  politicians,
+  politiciansInChamber,
+  stateName,
+  type Chamber,
+  type Party,
+  type StateCode,
+} from "../data/politicians";
+
+const total = politicians.length;
+const senate = politiciansInChamber("senate");
+const house = politiciansInChamber("house");
+const states = [...new Set(politicians.map((politician) => politician.state))].sort((a, b) =>
+  stateName(a).localeCompare(stateName(b), "en"),
+);
+
+const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
+  politicians.filter(
+    (politician) =>
+      (party === undefined || politician.party === party) &&
+      (state === undefined || politician.state === state) &&
+      (chamber === undefined || politician.chamber === chamber),
+  ).length;
+---
+
+<BaseLayout
+  title="America First list"
+  description="A filterable public-record list of U.S. politicians who do not support America First policies. The Senate is listed first. Criteria coming soon."
+>
+  <section class="hero" data-reveal>
+    <div class="stars" aria-hidden="true"></div>
+    <div class="shell">
+      <p class="kicker">Public record · Senate first</p>
+      <h1>America<br />First</h1>
+      <p class="lede">
+        A filterable list of U.S. politicians who do not support America First policies. The Senate is the open docket. The House is next. Criteria coming soon.
+      </p>
+    </div>
+  </section>
+
+  <div class="sheet" data-reveal>
+    <form id="filters" class="filters" action="/" method="get">
+      <fieldset>
+        <legend>Chamber</legend>
+        <div class="pills pills-chamber">
+          <label class="pill">
+            <input type="radio" name="chamber" value="" checked />
+            <span>Both</span>
+          </label>
+          {
+            CHAMBERS.map((chamber) => (
+              <label class:list={["pill", `pill-${chamber}`]}>
+                <input type="radio" name="chamber" value={chamber} />
+                <span>
+                  {CHAMBER_LABELS[chamber]}
+                  <span class="pill-count">{count(undefined, undefined, chamber)}</span>
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Party</legend>
+        <div class="pills pills-party">
+          <label class="pill">
+            <input type="radio" name="party" value="" checked />
+            <span>
+              All
+              <span class="pill-count" data-party-count="">{total}</span>
+            </span>
+          </label>
+          {
+            PARTIES.map((party) => (
+              <label class:list={["pill", `pill-party-${party}`]}>
+                <input type="radio" name="party" value={party} />
+                <span>
+                  {PARTY_LABELS[party]}
+                  <span class="pill-count" data-party-count={party}>
+                    {count(party)}
+                  </span>
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <div class="filter-fields">
+        <label class="field">
+          <span class="filter-label">State</span>
+          <select name="state">
+            <option value="">All states ({total})</option>
+            {
+              states.map((state) => (
+                <option value={state}>
+                  {stateName(state)} ({count(undefined, state)})
+                </option>
+              ))
+            }
+          </select>
+        </label>
+        <label class="field">
+          <span class="filter-label">Name</span>
+          <input name="q" type="search" autocomplete="off" placeholder="Search by name" />
+        </label>
+      </div>
+      <div class="filter-actions">
+        <button type="submit">Apply filters</button>
+        <a href="/">Clear filters</a>
+      </div>
+    </form>
+
+    <div class="toolbar">
+      <p id="count" aria-live="polite">Showing {total} of {total}</p>
+      <ShareOnX text="US politicians who don't support America First policies" />
+    </div>
+    <div id="empty" class="empty-file" hidden>
+      <p class="stamp">No match</p>
+      <h2>No file fits these filters.</h2>
+      <p>Clear a filter, or switch the chamber.</p>
+    </div>
+
+    <section id="chamber-senate" data-chamber-section="senate">
+      <div class="chamber-head">
+        <h2>The Senate</h2>
+        <a href="/senate">Open the Senate page</a>
+      </div>
+      <ul class="cards">
+        {senate.map((politician) => <PoliticianCard politician={politician} />)}
+      </ul>
+      <div id="senate-empty" class="empty-file" data-placeholder hidden>
+        <p class="stamp">No match</p>
+        <h2>No Senate file fits these filters.</h2>
+      </div>
+    </section>
+
+    <section id="chamber-house" data-chamber-section="house">
+      <div class="chamber-head">
+        <h2>The House</h2>
+        <a href="/house">Open the House page</a>
+      </div>
+      <ul class="cards">
+        {house.map((politician) => <PoliticianCard politician={politician} />)}
+      </ul>
+      {
+        house.length === 0 ? (
+          <div id="house-soon" class="coming-soon" data-placeholder>
+            <p class="stamp">Coming soon</p>
+            <h2>The House docket opens next.</h2>
+          </div>
+        ) : (
+          <div id="house-empty" class="empty-file" data-placeholder hidden>
+            <p class="stamp">No match</p>
+            <h2>No House file fits these filters.</h2>
+          </div>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  import { initFilters } from "../scripts/filters";
+  initFilters();
+</script>
