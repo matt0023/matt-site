@@ -76,6 +76,17 @@ export function initFilters(): void {
       if (placeholder.hidden === false) sectionPlaceholder = true;
     }
 
+    for (const badge of form.querySelectorAll<HTMLElement>("[data-party-count]")) {
+      const party = badge.dataset.partyCount ?? "";
+      const matches = cards.filter((card) => {
+        const chamberOk = chamberFilter === "" || card.dataset.chamber === chamberFilter;
+        const stateOk = stateFilter === "" || card.dataset.state === stateFilter;
+        const partyOk = party === "" || card.dataset.party === party;
+        return chamberOk && stateOk && partyOk;
+      }).length;
+      badge.textContent = String(matches);
+    }
+
     count.textContent = `Showing ${visible} of ${cards.length}`;
     empty.hidden = visible !== 0 || sectionPlaceholder || chamberFilter === "" || chamberFilter === "senate" || chamberFilter === "house";
 

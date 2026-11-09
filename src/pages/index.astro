@@ -47,7 +47,7 @@ const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
   </section>
 
   <div class="sheet">
-    <form id="filters" action="/" method="get">
+    <form id="filters" class="filters" action="/" method="get">
       <fieldset>
         <legend>Chamber</legend>
         <div class="pills pills-chamber">
@@ -73,7 +73,10 @@ const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
         <div class="pills pills-party">
           <label class="pill">
             <input type="radio" name="party" value="" checked />
-            <span>All</span>
+            <span>
+              All
+              <span class="pill-count" data-party-count="">{total}</span>
+            </span>
           </label>
           {
             PARTIES.map((party) => (
@@ -81,7 +84,9 @@ const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
                 <input type="radio" name="party" value={party} />
                 <span>
                   {PARTY_LABELS[party]}
-                  <span class="pill-count">{count(party)}</span>
+                  <span class="pill-count" data-party-count={party}>
+                    {count(party)}
+                  </span>
                 </span>
               </label>
             ))
@@ -90,7 +95,7 @@ const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
       </fieldset>
       <div class="filter-fields">
         <label class="field">
-          <span>State</span>
+          <span class="filter-label">State</span>
           <select name="state">
             <option value="">All states ({total})</option>
             {
@@ -103,7 +108,7 @@ const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
           </select>
         </label>
         <label class="field">
-          <span>Name</span>
+          <span class="filter-label">Name</span>
           <input name="q" type="search" autocomplete="off" placeholder="Search by name" />
         </label>
       </div>
