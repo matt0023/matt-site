@@ -1,0 +1,70 @@
+---
+import {
+  formatDate,
+  hostnameOf,
+  PARTY_LABELS,
+  stateName,
+  type Politician,
+} from "../data/politicians";
+
+interface Props {
+  politician: Politician;
+}
+
+const { politician } = Astro.props;
+const stateHref = `/state/${politician.state.toLowerCase()}`;
+---
+
+<li
+  class="card"
+  data-name={politician.name}
+  data-party={politician.party}
+  data-state={politician.state}
+>
+  <article>
+    {
+      politician.example && (
+        <p class="badge">Example — not a real politician</p>
+      )
+    }
+    <h2 class="card-title">
+      <a href={`/p/${politician.slug}`}>{politician.name}</a>
+    </h2>
+    <p class="meta">
+      {PARTY_LABELS[politician.party]}
+      {" · "}
+      <a href={stateHref}>{stateName(politician.state)}</a>
+      {" · "}
+      {politician.office}
+      {politician.district ? ` · District ${politician.district}` : ""}
+    </p>
+    {
+      politician.xHandle && (
+        <p class="meta">
+          <a href={`https://x.com/${politician.xHandle}`} rel="noopener noreferrer">
+            @{politician.xHandle} on X
+          </a>
+        </p>
+      )
+    }
+    <ul class="reasons">
+      {
+        politician.reasons.map((reason) => (
+          <li>
+            <p>{reason.text}</p>
+            <p>
+              <a href={reason.source} rel="noopener noreferrer">
+                Public record
+                <span class="visually-hidden">: {reason.text}</span>
+                <span aria-hidden="true"> ({hostnameOf(reason.source)})</span>
+              </a>
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="meta">
+      Updated <time datetime={politician.lastUpdated}>{formatDate(politician.lastUpdated)}</time>
+    </p>
+  </article>
+</li>

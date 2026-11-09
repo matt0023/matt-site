@@ -1,0 +1,100 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShareOnX from "../../components/ShareOnX.astro";
+import {
+  formatDate,
+  getPolitician,
+  hostnameOf,
+  PARTY_LABELS,
+  politicians,
+  stateName,
+} from "../../data/politicians";
+
+export function getStaticPaths() {
+  return politicians.map((politician) => ({ params: { slug: politician.slug } }));
+}
+
+const slug = Astro.params.slug;
+if (!slug) throw new Error("Missing slug");
+const politician = getPolitician(slug);
+if (!politician) throw new Error(`No politician for slug ${slug}`);
+
+const title = `${politician.name} · America First list`;
+const description = politician.example
+  ? `${politician.name} is a fake example entry, not a real politician.`
+  : `${politician.name}, ${PARTY_LABELS[politician.party]} ${politician.office} from ${stateName(politician.state)}.`;
+const shareText = politician.example
+  ? `${politician.name} is an example entry on the America First list, not a real politician.`
+  : `${politician.name} — America First list`;
+---
+
+<BaseLayout title={title} description={description}>
+  {
+    politician.example && (
+      <p class="badge">Example — not a real politician</p>
+    )
+  }
+  <h1>{politician.name}</h1>
+  <p class="meta">
+    {PARTY_LABELS[politician.party]}
+    {" · "}
+    <a href={`/state/${politician.state.toLowerCase()}`}>{stateName(politician.state)}</a>
+    {" · "}
+    {politician.office}
+    {politician.district ? ` · District ${politician.district}` : ""}
+  </p>
+  {
+    politician.xHandle && (
+      <p>
+        <a href={`https://x.com/${politician.xHandle}`} rel="noopener noreferrer">
+          @{politician.xHandle} on X
+        </a>
+      </p>
+    )
+  }
+  <p class="meta">
+    Updated <time datetime={politician.lastUpdated}>{formatDate(politician.lastUpdated)}</time>
+  </p>
+  <p><ShareOnX text={shareText} /></p>
+
+  <h2>Reasons</h2>
+  {
+    politician.reasons.length === 0 ? (
+      <p>No reasons recorded yet.</p>
+    ) : (
+      <ol class="reasons">
+        {politician.reasons.map((reason) => (
+          <li>
+            <p>{reason.text}</p>
+            <p>
+              <a href={reason.source} rel="noopener noreferrer">
+                Public record
+                <span class="visually-hidden">: {reason.text}</span>
+                <span aria-hidden="true"> ({hostnameOf(reason.source)})</span>
+              </a>
+            </p>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+
+  {
+    politician.featuredPostUrl && (
+      <>
+        <h2>Featured post</h2>
+        <blockquote class="twitter-tweet" data-dnt="true">
+          <p>
+            {politician.example
+              ? "Example post for a fake entry. Not a real politician."
+              : "Post on X."}
+          </p>
+          <a href={politician.featuredPostUrl}>View this post on X</a>
+        </blockquote>
+        <script is:inline async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+      </>
+    )
+  }
+
+  <p><a href="/">Back to the full list</a></p>
+</BaseLayout>

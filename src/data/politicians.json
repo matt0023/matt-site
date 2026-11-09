@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Example Senator",
+    "party": "D",
+    "state": "CA",
+    "office": "Senate",
+    "x_handle": "example_senator",
+    "featured_post_url": "https://x.com/example_senator/status/0",
+    "reasons": [
+      {
+        "text": "Example reason only. Not a real vote, bill, or statement.",
+        "source": "https://example.com/examples/example-senator/source-1"
+      },
+      {
+        "text": "Second example reason. This entry is fake.",
+        "source": "https://example.com/examples/example-senator/source-2"
+      }
+    ],
+    "last_updated": "2026-01-15",
+    "example": true
+  },
+  {
+    "name": "Example Representative",
+    "party": "R",
+    "state": "TX",
+    "office": "House",
+    "district": "7",
+    "x_handle": "example_rep",
+    "reasons": [
+      {
+        "text": "Example reason only. Not a real vote, bill, or statement.",
+        "source": "https://example.com/examples/example-representative/source-1"
+      }
+    ],
+    "last_updated": "2026-02-02",
+    "example": true
+  },
+  {
+    "name": "Example Governor",
+    "party": "I",
+    "state": "VT",
+    "office": "Governor",
+    "reasons": [
+      {
+        "text": "Example reason only. Not a real vote, bill, or statement.",
+        "source": "https://example.com/examples/example-governor/source-1"
+      }
+    ],
+    "last_updated": "2026-03-20",
+    "example": true
+  }
+]

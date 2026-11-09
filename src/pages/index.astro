@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PoliticianCard from "../components/PoliticianCard.astro";
+import ShareOnX from "../components/ShareOnX.astro";
+import {
+  PARTY_LABELS,
+  PARTIES,
+  politicians,
+  stateName,
+  type Party,
+  type StateCode,
+} from "../data/politicians";
+
+const total = politicians.length;
+const parties = PARTIES.filter((party) =>
+  politicians.some((politician) => politician.party === party),
+);
+const states = [...new Set(politicians.map((politician) => politician.state))].sort(
+  (a, b) => stateName(a).localeCompare(stateName(b), "en"),
+);
+
+const count = (party?: Party, state?: StateCode) =>
+  politicians.filter(
+    (politician) =>
+      (party === undefined || politician.party === party) &&
+      (state === undefined || politician.state === state),
+  ).length;
+---
+
+<BaseLayout
+  title="America First list"
+  description="Filterable list of US politicians who do not support America First policies. Criteria coming soon. Entries shipped with the site are fake examples."
+>
+  <h1>America First list</h1>
+  <p class="lede">
+    A filterable list of US politicians who do not support America First policies. Criteria coming soon.
+  </p>
+  <p>
+    Every person listed here is a fake example so the page has something to render. None of them are real politicians.
+  </p>
+
+  <form id="filters" action="/" method="get">
+    <label>
+      Party
+      <select name="party">
+        <option value="">All parties ({total})</option>
+        {
+          parties.map((party) => (
+            <option value={party}>
+              {PARTY_LABELS[party]} ({count(party)})
+            </option>
+          ))
+        }
+      </select>
+    </label>
+    <label>
+      State
+      <select name="state">
+        <option value="">All states ({total})</option>
+        {
+          states.map((state) => (
+            <option value={state}>
+              {stateName(state)} ({count(undefined, state)})
+            </option>
+          ))
+        }
+      </select>
+    </label>
+    <label>
+      Name
+      <input name="q" type="search" autocomplete="off" />
+    </label>
+    <button type="submit">Apply filters</button>
+  </form>
+
+  <div class="toolbar">
+    <p id="count" aria-live="polite">Showing {total} of {total}</p>
+    <ShareOnX text="US politicians who don't support America First policies" />
+  </div>
+  <p id="empty" hidden>No entries match these filters.</p>
+
+  <ul class="cards">
+    {politicians.map((politician) => <PoliticianCard politician={politician} />)}
+  </ul>
+</BaseLayout>
+
+<script>
+  import { initFilters } from "../scripts/filters";
+  initFilters();
+</script>
