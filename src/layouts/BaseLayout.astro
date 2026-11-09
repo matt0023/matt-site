@@ -32,7 +32,7 @@ const canonical = Astro.site
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="dark" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
@@ -74,5 +74,9 @@ const canonical = Astro.site
         <p>Matt Beavers. Criteria coming soon. Each reason links to a public record.</p>
       </div>
     </footer>
+    <script>
+      import { initReveal } from "../scripts/reveal";
+      initReveal();
+    </script>
   </body>
 </html>

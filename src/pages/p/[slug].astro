@@ -30,7 +30,7 @@ const shareText = politician.example
 ---
 
 <BaseLayout title={title} description={description}>
-  <article class="case">
+  <article class="case" data-reveal>
     <header class="case-banner">
       <p>Case file</p>
       <p>{politician.state} · {politician.party}</p>
@@ -101,10 +101,10 @@ const shareText = politician.example
               <li>
                 <p>{reason.text}</p>
                 <p>
-                  <a href={reason.source} rel="noopener noreferrer">
-                    Public record
+                  <a class="citation" href={reason.source} rel="noopener noreferrer">
+                    <span class="citation-label">Source</span>
+                    <span class="citation-host">{hostnameOf(reason.source)}</span>
                     <span class="visually-hidden">: {reason.text}</span>
-                    <span aria-hidden="true"> ({hostnameOf(reason.source)})</span>
                   </a>
                 </p>
               </li>

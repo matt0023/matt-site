@@ -35,7 +35,7 @@ const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
   title="America First list"
   description="A filterable public-record list of U.S. politicians who do not support America First policies. The Senate is listed first. Criteria coming soon."
 >
-  <section class="hero">
+  <section class="hero" data-reveal>
     <div class="stars" aria-hidden="true"></div>
     <div class="shell">
       <p class="kicker">Public record · Senate first</p>
@@ -46,7 +46,7 @@ const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
     </div>
   </section>
 
-  <div class="sheet">
+  <div class="sheet" data-reveal>
     <form id="filters" class="filters" action="/" method="get">
       <fieldset>
         <legend>Chamber</legend>
