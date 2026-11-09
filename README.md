@@ -2,7 +2,7 @@
 
 A static [Astro](https://astro.build) site: a filterable list of US politicians who do not support America First policies. Hosted on [Vercel](https://vercel.com).
 
-The criteria are not written yet. Every entry shipped in `src/data/politicians.json` is a fake example. Do not treat those rows, handles, or source links as real public records.
+The criteria are not written yet. `src/data/politicians.json` currently lists real people. Set `example` to `true` only on a fake sample row; the site badges those. Every reason needs a real public-record URL, and the build fails without one.
 
 ## Prerequisites
 

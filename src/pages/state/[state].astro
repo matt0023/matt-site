@@ -15,20 +15,21 @@ const people = politiciansInState(param);
 const code = param.toUpperCase();
 if (people.length === 0) throw new Error(`No entries for state ${param}`);
 const name = stateName(code as StateCode);
-const examplesOnly = people.every((politician) => politician.example);
 ---
 
 <BaseLayout
   title={`${name} · America First list`}
-  description={`Politicians in ${name} on the America First list. ${examplesOnly ? "These entries are fake examples." : ""}`}
+  description={`Case files for ${name} on the America First list.`}
 >
-  <h1>{name}</h1>
-  <p class="lede">
-    {people.length} {people.length === 1 ? "entry" : "entries"} in {name}.
-    {examplesOnly ? " All of them are fake examples, not real politicians." : ""}
-  </p>
-  <p><a href="/">Back to the full list</a></p>
-  <ul class="cards">
-    {people.map((politician) => <PoliticianCard politician={politician} />)}
-  </ul>
+  <section class="page-intro">
+    <p class="kicker">State file · {code}</p>
+    <h1>{name}</h1>
+    <p class="lede">
+      {people.length} {people.length === 1 ? "case file" : "case files"} in {name}.
+    </p>
+    <p><a href="/">Back to the full list</a></p>
+    <ul class="cards">
+      {people.map((politician) => <PoliticianCard politician={politician} />)}
+    </ul>
+  </section>
 </BaseLayout>

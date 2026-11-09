@@ -9,7 +9,7 @@ interface Props {
 const { title, description } = Astro.props;
 
 const nav = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "List" },
   { href: "/about", label: "About" },
 ];
 
@@ -42,7 +42,7 @@ const canonical = Astro.site
     <a class="skip-link" href="#content">Skip to content</a>
     <header class="site-header">
       <div class="shell bar">
-        <a class="wordmark" href="/">America First list</a>
+        <a class="wordmark" href="/">America First</a>
         <nav aria-label="Primary">
           <ul>
             {
@@ -61,12 +61,12 @@ const canonical = Astro.site
         </nav>
       </div>
     </header>
-    <main id="content" class="shell" tabindex="-1">
+    <main id="content" tabindex="-1">
       <slot />
     </main>
     <footer class="site-footer">
       <div class="shell">
-        <p>Matt Beavers. Example entries only. Criteria coming soon.</p>
+        <p>Matt Beavers. Criteria coming soon. Each reason links to a public record.</p>
       </div>
     </footer>
   </body>

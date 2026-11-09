@@ -1,52 +1,24 @@
 [
   {
-    "name": "Example Senator",
-    "party": "D",
-    "state": "CA",
-    "office": "Senate",
-    "x_handle": "example_senator",
-    "featured_post_url": "https://x.com/example_senator/status/0",
+    "name": "John Thune",
+    "party": "R",
+    "state": "SD",
+    "office": "Senate Majority Leader",
+    "x_handle": "SenJohnThune",
     "reasons": [
       {
-        "text": "Example reason only. Not a real vote, bill, or statement.",
-        "source": "https://example.com/examples/example-senator/source-1"
+        "text": "The House-passed text of S. 1383 is the Safeguard American Voter Eligibility Act, also called the SAVE America Act. The Congressional Research Service summary says it would require documentary proof of U.S. citizenship to register to vote in a federal election and photo identification to vote. The House passed that text on February 11, 2026, 218–213. Congress.gov lists the bill as having passed the House and not been enacted. Its latest Senate action is that cloture on amendment S.Amdt. 4732 was not invoked on March 26, 2026, 53–47.",
+        "source": "https://www.congress.gov/bill/119th-congress/senate-bill/1383"
       },
       {
-        "text": "Second example reason. This entry is fake.",
-        "source": "https://example.com/examples/example-senator/source-2"
-      }
-    ],
-    "last_updated": "2026-01-15",
-    "example": true
-  },
-  {
-    "name": "Example Representative",
-    "party": "R",
-    "state": "TX",
-    "office": "House",
-    "district": "7",
-    "x_handle": "example_rep",
-    "reasons": [
+        "text": "On March 17, 2026, Senator Thune moved to concur in the House amendment to S. 1383. On March 24, 2026, he proposed amendment S.Amdt. 4732 for Senator Husted, and a cloture motion on that amendment was presented. On March 26, 2026, the Senate did not invoke cloture, 53–47 (Record Vote 73). Congress.gov lists that failed cloture vote as the latest action.",
+        "source": "https://www.congress.gov/bill/119th-congress/senate-bill/1383/all-actions"
+      },
       {
-        "text": "Example reason only. Not a real vote, bill, or statement.",
-        "source": "https://example.com/examples/example-representative/source-1"
+        "text": "On March 26, 2026, the Senate rejected cloture on Husted amendment No. 4732 to S. 1383. The roll call states the amendment’s purpose as “To require voters to provide photo identification,” and records the result as rejected, 53–47, with a three-fifths majority required. John Thune (R-SD) voted yea.",
+        "source": "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1192/vote_119_2_00073.htm"
       }
     ],
-    "last_updated": "2026-02-02",
-    "example": true
-  },
-  {
-    "name": "Example Governor",
-    "party": "I",
-    "state": "VT",
-    "office": "Governor",
-    "reasons": [
-      {
-        "text": "Example reason only. Not a real vote, bill, or statement.",
-        "source": "https://example.com/examples/example-governor/source-1"
-      }
-    ],
-    "last_updated": "2026-03-20",
-    "example": true
+    "last_updated": "2026-11-09"
   }
 ]

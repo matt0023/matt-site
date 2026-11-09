@@ -11,6 +11,8 @@ export function initFilters(): void {
 
   const partyValues = new Set([...party.options].map((option) => option.value));
   const stateValues = new Set([...state.options].map((option) => option.value));
+  let partyFilter = "";
+  let stateFilter = "";
 
   const normalizeParty = (value: string) => {
     if (value.toLowerCase() === "other") return "other";
@@ -19,10 +21,10 @@ export function initFilters(): void {
 
   const readFromUrl = () => {
     const params = new URLSearchParams(location.search);
-    const partyValue = normalizeParty(params.get("party") ?? "");
-    const stateValue = (params.get("state") ?? "").toUpperCase();
-    party.value = partyValues.has(partyValue) ? partyValue : "";
-    state.value = stateValues.has(stateValue) ? stateValue : "";
+    partyFilter = normalizeParty(params.get("party") ?? "");
+    stateFilter = (params.get("state") ?? "").toUpperCase();
+    party.value = partyValues.has(partyFilter) ? partyFilter : "";
+    state.value = stateValues.has(stateFilter) ? stateFilter : "";
     query.value = params.get("q") ?? "";
   };
 
@@ -32,8 +34,8 @@ export function initFilters(): void {
     for (const card of cards) {
       const name = (card.dataset.name ?? "").toLowerCase();
       const match =
-        (party.value === "" || card.dataset.party === party.value) &&
-        (state.value === "" || card.dataset.state === state.value) &&
+        (partyFilter === "" || card.dataset.party === partyFilter) &&
+        (stateFilter === "" || card.dataset.state === stateFilter) &&
         (q === "" || name.includes(q));
       card.hidden = !match;
       if (match) visible += 1;
@@ -42,8 +44,8 @@ export function initFilters(): void {
     empty.hidden = visible !== 0;
 
     const params = new URLSearchParams();
-    if (party.value) params.set("party", party.value);
-    if (state.value) params.set("state", state.value);
+    if (partyFilter) params.set("party", partyFilter);
+    if (stateFilter) params.set("state", stateFilter);
     const trimmed = query.value.trim();
     if (trimmed) params.set("q", trimmed);
     const qs = params.toString();
@@ -61,9 +63,15 @@ export function initFilters(): void {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    partyFilter = party.value;
+    stateFilter = state.value;
     apply(true);
   });
-  form.addEventListener("input", () => apply(false));
+  form.addEventListener("input", () => {
+    partyFilter = party.value;
+    stateFilter = state.value;
+    apply(false);
+  });
   window.addEventListener("popstate", () => {
     readFromUrl();
     apply(false);

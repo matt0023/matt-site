@@ -1,11 +1,5 @@
 ---
-import {
-  formatDate,
-  hostnameOf,
-  PARTY_LABELS,
-  stateName,
-  type Politician,
-} from "../data/politicians";
+import { formatDate, PARTY_LABELS, type Politician } from "../data/politicians";
 
 interface Props {
   politician: Politician;
@@ -13,6 +7,8 @@ interface Props {
 
 const { politician } = Astro.props;
 const stateHref = `/state/${politician.state.toLowerCase()}`;
+const reasonCount = politician.reasons.length;
+const reasonLabel = reasonCount === 1 ? "1 reason on file" : `${reasonCount} reasons on file`;
 ---
 
 <li
@@ -22,48 +18,37 @@ const stateHref = `/state/${politician.state.toLowerCase()}`;
   data-state={politician.state}
 >
   <article>
+    <p class="watermark" aria-hidden="true">{politician.state}</p>
     {
       politician.example && (
-        <p class="badge">Example — not a real politician</p>
+        <p class="example-flag">Example — not a real politician</p>
       )
     }
+    <p class="badges">
+      <span class="badge-party" data-party={politician.party}>
+        {politician.party}
+        <span class="visually-hidden"> {PARTY_LABELS[politician.party]}</span>
+      </span>
+      <a class="badge-state" href={stateHref}>{politician.state}</a>
+    </p>
     <h2 class="card-title">
       <a href={`/p/${politician.slug}`}>{politician.name}</a>
     </h2>
-    <p class="meta">
-      {PARTY_LABELS[politician.party]}
-      {" · "}
-      <a href={stateHref}>{stateName(politician.state)}</a>
-      {" · "}
-      {politician.office}
+    <p class="office">
+      {PARTY_LABELS[politician.party]} · {politician.office}
       {politician.district ? ` · District ${politician.district}` : ""}
     </p>
     {
       politician.xHandle && (
-        <p class="meta">
+        <p class="office">
           <a href={`https://x.com/${politician.xHandle}`} rel="noopener noreferrer">
-            @{politician.xHandle} on X
+            @{politician.xHandle}
           </a>
         </p>
       )
     }
-    <ul class="reasons">
-      {
-        politician.reasons.map((reason) => (
-          <li>
-            <p>{reason.text}</p>
-            <p>
-              <a href={reason.source} rel="noopener noreferrer">
-                Public record
-                <span class="visually-hidden">: {reason.text}</span>
-                <span aria-hidden="true"> ({hostnameOf(reason.source)})</span>
-              </a>
-            </p>
-          </li>
-        ))
-      }
-    </ul>
-    <p class="meta">
+    <p class="reason-count">{reasonLabel}</p>
+    <p class="stamp">
       Updated <time datetime={politician.lastUpdated}>{formatDate(politician.lastUpdated)}</time>
     </p>
   </article>

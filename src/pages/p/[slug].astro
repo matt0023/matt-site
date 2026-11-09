@@ -22,79 +22,102 @@ if (!politician) throw new Error(`No politician for slug ${slug}`);
 const title = `${politician.name} · America First list`;
 const description = politician.example
   ? `${politician.name} is a fake example entry, not a real politician.`
-  : `${politician.name}, ${PARTY_LABELS[politician.party]} ${politician.office} from ${stateName(politician.state)}.`;
+  : `${politician.name}, ${politician.office} (${politician.party}-${politician.state}). Reasons cite public records.`;
 const shareText = politician.example
   ? `${politician.name} is an example entry on the America First list, not a real politician.`
   : `${politician.name} — America First list`;
 ---
 
 <BaseLayout title={title} description={description}>
-  {
-    politician.example && (
-      <p class="badge">Example — not a real politician</p>
-    )
-  }
-  <h1>{politician.name}</h1>
-  <p class="meta">
-    {PARTY_LABELS[politician.party]}
-    {" · "}
-    <a href={`/state/${politician.state.toLowerCase()}`}>{stateName(politician.state)}</a>
-    {" · "}
-    {politician.office}
-    {politician.district ? ` · District ${politician.district}` : ""}
-  </p>
-  {
-    politician.xHandle && (
-      <p>
-        <a href={`https://x.com/${politician.xHandle}`} rel="noopener noreferrer">
-          @{politician.xHandle} on X
-        </a>
-      </p>
-    )
-  }
-  <p class="meta">
-    Updated <time datetime={politician.lastUpdated}>{formatDate(politician.lastUpdated)}</time>
-  </p>
-  <p><ShareOnX text={shareText} /></p>
-
-  <h2>Reasons</h2>
-  {
-    politician.reasons.length === 0 ? (
-      <p>No reasons recorded yet.</p>
-    ) : (
-      <ol class="reasons">
-        {politician.reasons.map((reason) => (
-          <li>
-            <p>{reason.text}</p>
-            <p>
-              <a href={reason.source} rel="noopener noreferrer">
-                Public record
-                <span class="visually-hidden">: {reason.text}</span>
-                <span aria-hidden="true"> ({hostnameOf(reason.source)})</span>
-              </a>
-            </p>
-          </li>
-        ))}
-      </ol>
-    )
-  }
-
-  {
-    politician.featuredPostUrl && (
-      <>
-        <h2>Featured post</h2>
-        <blockquote class="twitter-tweet" data-dnt="true">
+  <article class="case">
+    <header class="case-banner">
+      <p>Case file</p>
+      <p>{politician.state} · {politician.party}</p>
+    </header>
+    <div class="case-body">
+      {
+        politician.example && (
+          <p class="example-flag">Example — not a real politician</p>
+        )
+      }
+      <p class="kicker">Docket entry</p>
+      <h1>{politician.name}</h1>
+      <dl class="facts">
+        <div>
+          <dt>Party</dt>
+          <dd>{PARTY_LABELS[politician.party]}</dd>
+        </div>
+        <div>
+          <dt>State</dt>
+          <dd>
+            <a href={`/state/${politician.state.toLowerCase()}`}>{stateName(politician.state)}</a>
+          </dd>
+        </div>
+        <div>
+          <dt>Office</dt>
+          <dd>
+            {politician.office}
+            {politician.district ? `, District ${politician.district}` : ""}
+          </dd>
+        </div>
+        <div>
+          <dt>Updated</dt>
+          <dd>
+            <time datetime={politician.lastUpdated}>{formatDate(politician.lastUpdated)}</time>
+          </dd>
+        </div>
+      </dl>
+      {
+        politician.xHandle && (
           <p>
-            {politician.example
-              ? "Example post for a fake entry. Not a real politician."
-              : "Post on X."}
+            <a href={`https://x.com/${politician.xHandle}`} rel="noopener noreferrer">
+              @{politician.xHandle} on X
+            </a>
           </p>
-          <a href={politician.featuredPostUrl}>View this post on X</a>
-        </blockquote>
-        <script is:inline async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
-      </>
-    )
-  }
+        )
+      }
+      <p class="stamp">
+        {politician.reasons.length}
+        {politician.reasons.length === 1 ? " reason" : " reasons"} on file
+      </p>
+      <p><ShareOnX text={shareText} /></p>
 
-  <p><a href="/">Back to the full list</a></p>
+      <h2>Exhibits</h2>
+      {
+        politician.reasons.length === 0 ? (
+          <p>No reasons recorded yet.</p>
+        ) : (
+          <ol class="exhibits">
+            {politician.reasons.map((reason) => (
+              <li>
+                <p>{reason.text}</p>
+                <p>
+                  <a href={reason.source} rel="noopener noreferrer">
+                    Public record
+                    <span class="visually-hidden">: {reason.text}</span>
+                    <span aria-hidden="true"> ({hostnameOf(reason.source)})</span>
+                  </a>
+                </p>
+              </li>
+            ))}
+          </ol>
+        )
+      }
+
+      {
+        politician.featuredPostUrl && (
+          <>
+            <h2>Featured post</h2>
+            <blockquote class="twitter-tweet" data-dnt="true">
+              <p>{politician.example ? "Example post. Not a real politician." : "Post on X."}</p>
+              <a href={politician.featuredPostUrl}>View this post on X</a>
+            </blockquote>
+            <script is:inline async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+          </>
+        )
+      }
+
+      <p><a href="/">Back to the full list</a></p>
+    </div>
+  </article>
 </BaseLayout>
