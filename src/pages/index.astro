@@ -48,50 +48,69 @@ const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
 
   <div class="sheet">
     <form id="filters" action="/" method="get">
-      <label>
-        <span>Chamber</span>
-        <select name="chamber">
-          <option value="">Senate and House ({total})</option>
+      <fieldset>
+        <legend>Chamber</legend>
+        <div class="pills pills-chamber">
+          <label class="pill">
+            <input type="radio" name="chamber" value="" checked />
+            <span>Both</span>
+          </label>
           {
             CHAMBERS.map((chamber) => (
-              <option value={chamber}>
-                {CHAMBER_LABELS[chamber]} ({count(undefined, undefined, chamber)})
-              </option>
+              <label class:list={["pill", `pill-${chamber}`]}>
+                <input type="radio" name="chamber" value={chamber} />
+                <span>
+                  {CHAMBER_LABELS[chamber]}
+                  <span class="pill-count">{count(undefined, undefined, chamber)}</span>
+                </span>
+              </label>
             ))
           }
-        </select>
-      </label>
-      <label>
-        <span>Party</span>
-        <select name="party">
-          <option value="">All parties ({total})</option>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Party</legend>
+        <div class="pills pills-party">
+          <label class="pill">
+            <input type="radio" name="party" value="" checked />
+            <span>All</span>
+          </label>
           {
             PARTIES.map((party) => (
-              <option value={party}>
-                {PARTY_LABELS[party]} ({count(party)})
-              </option>
+              <label class:list={["pill", `pill-party-${party}`]}>
+                <input type="radio" name="party" value={party} />
+                <span>
+                  {PARTY_LABELS[party]}
+                  <span class="pill-count">{count(party)}</span>
+                </span>
+              </label>
             ))
           }
-        </select>
-      </label>
-      <label>
-        <span>State</span>
-        <select name="state">
-          <option value="">All states ({total})</option>
-          {
-            states.map((state) => (
-              <option value={state}>
-                {stateName(state)} ({count(undefined, state)})
-              </option>
-            ))
-          }
-        </select>
-      </label>
-      <label>
-        <span>Name</span>
-        <input name="q" type="search" autocomplete="off" />
-      </label>
-      <button type="submit">Apply filters</button>
+        </div>
+      </fieldset>
+      <div class="filter-fields">
+        <label class="field">
+          <span>State</span>
+          <select name="state">
+            <option value="">All states ({total})</option>
+            {
+              states.map((state) => (
+                <option value={state}>
+                  {stateName(state)} ({count(undefined, state)})
+                </option>
+              ))
+            }
+          </select>
+        </label>
+        <label class="field">
+          <span>Name</span>
+          <input name="q" type="search" autocomplete="off" placeholder="Search by name" />
+        </label>
+      </div>
+      <div class="filter-actions">
+        <button type="submit">Apply filters</button>
+        <a href="/">Clear filters</a>
+      </div>
     </form>
 
     <div class="toolbar">

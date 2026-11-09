@@ -2,8 +2,6 @@ const CHAMBERS = new Set(["senate", "house", "other"]);
 
 export function initFilters(): void {
   const form = document.querySelector<HTMLFormElement>("#filters");
-  const chamber = form?.querySelector<HTMLSelectElement>('[name="chamber"]');
-  const party = form?.querySelector<HTMLSelectElement>('[name="party"]');
   const state = form?.querySelector<HTMLSelectElement>('[name="state"]');
   const query = form?.querySelector<HTMLInputElement>('[name="q"]');
   const count = document.querySelector<HTMLElement>("#count");
@@ -11,11 +9,24 @@ export function initFilters(): void {
   const share = document.querySelector<HTMLAnchorElement>("a[data-share]");
   const cards = [...document.querySelectorAll<HTMLElement>(".card")];
   const sections = [...document.querySelectorAll<HTMLElement>("[data-chamber-section]")];
-  if (!form || !chamber || !party || !state || !query || !count || !empty) return;
+  if (!form || !state || !query || !count || !empty) return;
 
-  const chamberValues = new Set([...chamber.options].map((option) => option.value));
-  const partyValues = new Set([...party.options].map((option) => option.value));
+  const chamberRadios = [...form.querySelectorAll<HTMLInputElement>('input[name="chamber"]')];
+  const partyRadios = [...form.querySelectorAll<HTMLInputElement>('input[name="party"]')];
+  const chamberValues = new Set(chamberRadios.map((radio) => radio.value));
+  const partyValues = new Set(partyRadios.map((radio) => radio.value));
   const stateValues = new Set([...state.options].map((option) => option.value));
+  if (chamberRadios.length === 0 || partyRadios.length === 0) return;
+
+  const checkedValue = (radios: HTMLInputElement[]) =>
+    radios.find((radio) => radio.checked)?.value ?? "";
+
+  const selectRadio = (radios: HTMLInputElement[], value: string) => {
+    const match = radios.find((radio) => radio.value === value);
+    const fallback = radios.find((radio) => radio.value === "");
+    const chosen = match ?? fallback;
+    if (chosen) chosen.checked = true;
+  };
   let chamberFilter = "";
   let partyFilter = "";
   let stateFilter = "";
@@ -31,8 +42,8 @@ export function initFilters(): void {
     chamberFilter = CHAMBERS.has(requestedChamber) ? requestedChamber : "";
     partyFilter = normalizeParty(params.get("party") ?? "");
     stateFilter = (params.get("state") ?? "").toUpperCase();
-    chamber.value = chamberValues.has(chamberFilter) ? chamberFilter : "";
-    party.value = partyValues.has(partyFilter) ? partyFilter : "";
+    selectRadio(chamberRadios, chamberValues.has(chamberFilter) ? chamberFilter : "");
+    selectRadio(partyRadios, partyValues.has(partyFilter) ? partyFilter : "");
     state.value = stateValues.has(stateFilter) ? stateFilter : "";
     query.value = params.get("q") ?? "";
   };
@@ -88,8 +99,8 @@ export function initFilters(): void {
   };
 
   const fromControls = () => {
-    chamberFilter = chamber.value;
-    partyFilter = party.value;
+    chamberFilter = checkedValue(chamberRadios);
+    partyFilter = checkedValue(partyRadios);
     stateFilter = state.value;
   };
 

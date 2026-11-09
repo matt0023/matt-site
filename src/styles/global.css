@@ -280,47 +280,173 @@ a {
 }
 
 .filters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-  gap: 0.8rem;
-  align-items: end;
-}
-
-.filters label {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 1.15rem;
+}
+
+.filters fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.filters legend,
+.field > span {
+  display: block;
+  margin: 0 0 0.55rem;
   color: var(--muted);
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-.filters select,
-.filters input,
-.filters button {
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  margin: 0;
+  cursor: pointer;
+}
+
+.pill input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pill span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   min-height: 2.75rem;
-  font-family: var(--font-serif);
-  font-size: 1rem;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--ink);
+  padding: 0.45rem 0.85rem;
+  border: 3px solid var(--line);
   background: var(--card);
-  border: 2px solid var(--line);
-  padding: 0.45rem 0.6rem;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.pills-chamber .pill span {
+  min-height: 3.35rem;
+  padding: 0.65rem 1.05rem;
+  font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+}
+
+.pill .pill-count {
+  min-height: 0;
+  padding: 0.15rem 0.35rem;
+  border: 0;
+  background: color-mix(in srgb, currentColor 16%, transparent);
+  color: inherit;
+  font-size: 0.78em;
+  letter-spacing: 0;
+}
+
+.pill input:checked + span {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--paper);
+}
+
+.pill input:focus-visible + span {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.pill-house input:checked + span,
+.pill-party-R input:checked + span {
+  background: #8e1b2c;
+  border-color: #8e1b2c;
+  color: #fff;
+}
+
+.pill-senate input:checked + span,
+.pill-party-D input:checked + span {
+  background: #0c2340;
+  border-color: #0c2340;
+  color: #fff;
+}
+
+.pill-party-I input:checked + span,
+.pill-party-other input:checked + span,
+.pill-other input:checked + span {
+  background: #3d3428;
+  border-color: #3d3428;
+  color: #f3ead7;
+}
+
+.filter-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.field select,
+.field input {
   width: 100%;
+  min-height: 3.35rem;
+  padding: 0.65rem 0.85rem;
+  border: 3px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+}
+
+.field select {
+  appearance: none;
+  padding-right: 2.4rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ink) 50%),
+    linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.15rem) 55%,
+    calc(100% - 0.75rem) 55%;
+  background-size: 0.45rem 0.45rem;
+  background-repeat: no-repeat;
+}
+
+.field input::placeholder {
+  color: var(--muted);
+}
+
+.filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.2rem;
 }
 
 .filters button {
-  width: auto;
-  justify-self: start;
-  background: var(--red);
+  min-height: 3.1rem;
+  padding: 0.55rem 1.1rem;
+  border: 3px solid #8e1b2c;
+  background: #8e1b2c;
   color: #fff;
-  border-color: var(--red);
   font-family: var(--font-display);
+  font-size: 1.05rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.filters button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
 }
 
 .toolbar {
