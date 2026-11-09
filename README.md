@@ -39,7 +39,8 @@ Edit the array in `src/data/politicians.json`. One object per person:
 | `name` | yes | The page slug is this name, lowercased, with punctuation turned into hyphens. Renaming changes `/p/…`. |
 | `party` | yes | `R`, `D`, `I`, or `other`. |
 | `state` | yes | Two-letter USPS code, including `DC`. |
-| `office` | yes | For example `Senate`, `House`, or `Governor`. |
+| `chamber` | yes | `senate`, `house`, or `other`. If `office` contains “Senate” or “House,” `chamber` has to match. |
+| `office` | yes | For example `Senate`, `Senate Majority Leader`, or `House`. |
 | `district` | no | House district or other short label. |
 | `x_handle` | no | X handle without `@`. The site links to `https://x.com/{handle}`. |
 | `featured_post_url` | no | An `x.com` or `twitter.com` post URL. When set, that person's page embeds it with X's `widgets.js`. |
@@ -47,7 +48,7 @@ Edit the array in `src/data/politicians.json`. One object per person:
 | `last_updated` | yes | `YYYY-MM-DD`. |
 | `example` | no | Set `true` for fake sample rows. The site badges those entries. Omit it for a real person. |
 
-State pages (`/state/ca`) are generated for states that have at least one entry. Removing the last person in a state removes that page.
+State pages (`/state/ca`) are generated for states that have at least one entry. Removing the last person in a state removes that page. `/senate` and `/house` list that chamber. The House block stays on “coming soon” until a `chamber: "house"` entry exists.
 
 To remove someone, delete their object and run `npm run build`.
 
@@ -62,4 +63,4 @@ No `vercel.json` and no Vercel adapter are required for this fully static site. 
 
 Before launch, set `site` in `astro.config.mjs` to the production origin (`https://…`). Until then, `@astrojs/sitemap` skips sitemap generation, and canonical / `og:url` tags are omitted so the build does not advertise a guessed URL. After `site` is set, add the sitemap URL to `public/robots.txt`.
 
-Home filters use `?party=`, `?state=`, and `?q=` (name search). The full list is in the HTML; a small script hides non-matches and keeps those query params in the URL so a filtered view can be shared.
+Home filters use `?chamber=`, `?party=`, `?state=`, and `?q=` (name search). The full list is in the HTML; a small script hides non-matches and keeps those query params in the URL so a filtered view can be shared. With no chamber selected, the Senate section is first and the House section follows.

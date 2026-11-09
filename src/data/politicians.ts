@@ -55,8 +55,10 @@ const STATE_NAMES = {
 } as const;
 
 export const PARTIES = ["R", "D", "I", "other"] as const;
+export const CHAMBERS = ["senate", "house", "other"] as const;
 
 export type Party = (typeof PARTIES)[number];
+export type Chamber = (typeof CHAMBERS)[number];
 export type StateCode = keyof typeof STATE_NAMES;
 
 export interface Reason {
@@ -69,6 +71,7 @@ export interface Politician {
   name: string;
   party: Party;
   state: StateCode;
+  chamber: Chamber;
   office: string;
   district?: string;
   xHandle?: string;
@@ -82,6 +85,12 @@ export const PARTY_LABELS: Record<Party, string> = {
   R: "Republican",
   D: "Democrat",
   I: "Independent",
+  other: "Other",
+};
+
+export const CHAMBER_LABELS: Record<Chamber, string> = {
+  senate: "Senate",
+  house: "House",
   other: "Other",
 };
 
@@ -156,6 +165,10 @@ function isParty(value: string): value is Party {
   return (PARTIES as readonly string[]).includes(value);
 }
 
+function isChamber(value: string): value is Chamber {
+  return (CHAMBERS as readonly string[]).includes(value);
+}
+
 function isState(value: string): value is StateCode {
   return Object.prototype.hasOwnProperty.call(STATE_NAMES, value);
 }
@@ -199,7 +212,15 @@ function validateEntry(value: unknown, index: number): Politician {
   }
   const stateRaw = requiredString(value.state, `${name} state`).toUpperCase();
   if (!isState(stateRaw)) fail(`${name} state must be a 2-letter USPS code`);
+  const chamberRaw = requiredString(value.chamber, `${name} chamber`).toLowerCase();
+  if (!isChamber(chamberRaw)) fail(`${name} chamber must be senate, house, or other`);
   const office = requiredString(value.office, `${name} office`);
+  if (/\bsenate\b/i.test(office) && chamberRaw !== "senate") {
+    fail(`${name} office names the Senate, so chamber must be senate`);
+  }
+  if (/\bhouse\b/i.test(office) && chamberRaw !== "house") {
+    fail(`${name} office names the House, so chamber must be house`);
+  }
   const district = optionalString(value.district, `${name} district`);
   const xHandle = optionalString(value.x_handle, `${name} x_handle`);
   if (xHandle && !/^[A-Za-z0-9_]{1,15}$/.test(xHandle)) {
@@ -218,6 +239,7 @@ function validateEntry(value: unknown, index: number): Politician {
     name,
     party: partyRaw,
     state: stateRaw,
+    chamber: chamberRaw,
     office,
     ...(district ? { district } : {}),
     ...(xHandle ? { xHandle } : {}),
@@ -243,6 +265,10 @@ export const politicians: readonly Politician[] = validateAll(raw);
 
 export function getPolitician(slug: string): Politician | undefined {
   return politicians.find((politician) => politician.slug === slug);
+}
+
+export function politiciansInChamber(chamber: string): Politician[] {
+  return politicians.filter((politician) => politician.chamber === chamber);
 }
 
 export function politiciansInState(state: string): Politician[] {

@@ -5,6 +5,7 @@ import {
   formatDate,
   getPolitician,
   hostnameOf,
+  CHAMBER_LABELS,
   PARTY_LABELS,
   politicians,
   stateName,
@@ -51,6 +52,14 @@ const shareText = politician.example
           <dt>State</dt>
           <dd>
             <a href={`/state/${politician.state.toLowerCase()}`}>{stateName(politician.state)}</a>
+          </dd>
+        </div>
+        <div>
+          <dt>Chamber</dt>
+          <dd>
+            <a href={politician.chamber === "house" ? "/house" : politician.chamber === "senate" ? "/senate" : "/"}>
+              {CHAMBER_LABELS[politician.chamber]}
+            </a>
           </dd>
         </div>
         <div>

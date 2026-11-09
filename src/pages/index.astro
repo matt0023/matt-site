@@ -3,39 +3,45 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PoliticianCard from "../components/PoliticianCard.astro";
 import ShareOnX from "../components/ShareOnX.astro";
 import {
+  CHAMBERS,
+  CHAMBER_LABELS,
   PARTY_LABELS,
   PARTIES,
   politicians,
+  politiciansInChamber,
   stateName,
+  type Chamber,
   type Party,
   type StateCode,
 } from "../data/politicians";
 
 const total = politicians.length;
-const parties = PARTIES;
-const states = [...new Set(politicians.map((politician) => politician.state))].sort(
-  (a, b) => stateName(a).localeCompare(stateName(b), "en"),
+const senate = politiciansInChamber("senate");
+const house = politiciansInChamber("house");
+const states = [...new Set(politicians.map((politician) => politician.state))].sort((a, b) =>
+  stateName(a).localeCompare(stateName(b), "en"),
 );
 
-const count = (party?: Party, state?: StateCode) =>
+const count = (party?: Party, state?: StateCode, chamber?: Chamber) =>
   politicians.filter(
     (politician) =>
       (party === undefined || politician.party === party) &&
-      (state === undefined || politician.state === state),
+      (state === undefined || politician.state === state) &&
+      (chamber === undefined || politician.chamber === chamber),
   ).length;
 ---
 
 <BaseLayout
   title="America First list"
-  description="A filterable public-record list of U.S. politicians who do not support America First policies. Criteria coming soon."
+  description="A filterable public-record list of U.S. politicians who do not support America First policies. The Senate is listed first. Criteria coming soon."
 >
   <section class="hero">
     <div class="stars" aria-hidden="true"></div>
     <div class="shell">
-      <p class="kicker">Public record · Docket</p>
+      <p class="kicker">Public record · Senate first</p>
       <h1>America<br />First</h1>
       <p class="lede">
-        A filterable list of U.S. politicians who do not support America First policies. Criteria coming soon.
+        A filterable list of U.S. politicians who do not support America First policies. The Senate is the open docket. The House is next. Criteria coming soon.
       </p>
     </div>
   </section>
@@ -43,11 +49,24 @@ const count = (party?: Party, state?: StateCode) =>
   <div class="sheet">
     <form id="filters" action="/" method="get">
       <label>
+        <span>Chamber</span>
+        <select name="chamber">
+          <option value="">Senate and House ({total})</option>
+          {
+            CHAMBERS.map((chamber) => (
+              <option value={chamber}>
+                {CHAMBER_LABELS[chamber]} ({count(undefined, undefined, chamber)})
+              </option>
+            ))
+          }
+        </select>
+      </label>
+      <label>
         <span>Party</span>
         <select name="party">
           <option value="">All parties ({total})</option>
           {
-            parties.map((party) => (
+            PARTIES.map((party) => (
               <option value={party}>
                 {PARTY_LABELS[party]} ({count(party)})
               </option>
@@ -82,12 +101,46 @@ const count = (party?: Party, state?: StateCode) =>
     <div id="empty" class="empty-file" hidden>
       <p class="stamp">No match</p>
       <h2>No file fits these filters.</h2>
-      <p>Clear the name, or choose another party or state.</p>
+      <p>Clear a filter, or switch the chamber.</p>
     </div>
 
-    <ul class="cards">
-      {politicians.map((politician) => <PoliticianCard politician={politician} />)}
-    </ul>
+    <section id="chamber-senate" data-chamber-section="senate">
+      <div class="chamber-head">
+        <h2>The Senate</h2>
+        <a href="/senate">Open the Senate page</a>
+      </div>
+      <ul class="cards">
+        {senate.map((politician) => <PoliticianCard politician={politician} />)}
+      </ul>
+      <div id="senate-empty" class="empty-file" data-placeholder hidden>
+        <p class="stamp">No match</p>
+        <h2>No Senate file fits these filters.</h2>
+      </div>
+    </section>
+
+    <section id="chamber-house" data-chamber-section="house">
+      <div class="chamber-head">
+        <h2>The House</h2>
+        <a href="/house">Open the House page</a>
+      </div>
+      <ul class="cards">
+        {house.map((politician) => <PoliticianCard politician={politician} />)}
+      </ul>
+      {
+        house.length === 0 ? (
+          <div id="house-soon" class="coming-soon" data-placeholder>
+            <p class="stamp">Coming soon</p>
+            <h2>The House docket is next.</h2>
+            <p>No House file is in the record yet. This section fills in when the first one is added.</p>
+          </div>
+        ) : (
+          <div id="house-empty" class="empty-file" data-placeholder hidden>
+            <p class="stamp">No match</p>
+            <h2>No House file fits these filters.</h2>
+          </div>
+        )
+      }
+    </section>
   </div>
 </BaseLayout>
 

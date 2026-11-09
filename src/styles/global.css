@@ -614,3 +614,39 @@ blockquote.twitter-tweet {
     min-height: 0;
   }
 }
+
+.chamber-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  margin-top: 1.6rem;
+}
+
+.chamber-head h2 {
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+}
+
+#chamber-senate .chamber-head h2 {
+  color: var(--stamp);
+}
+
+.coming-soon {
+  margin-top: 0.8rem;
+  padding: 1.3rem 1rem 1.4rem;
+  text-align: center;
+  border: 3px dashed var(--stamp);
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    color-mix(in srgb, var(--stamp) 12%, transparent) 10px,
+    color-mix(in srgb, var(--stamp) 12%, transparent) 11px
+  );
+}
+
+.coming-soon h2 {
+  margin-top: 0.7rem;
+}
