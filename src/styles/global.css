@@ -44,7 +44,7 @@
   --bg-elev: #101114;
   --ink: #f5f2ec;
   --muted: #b7b1a8;
-  --faint: #8f897f;
+  --faint: #d5d0c6;
   --line: rgb(245 242 236 / 14%);
   --line-strong: rgb(245 242 236 / 28%);
   --red: #e7b2a8;
@@ -236,8 +236,8 @@ p {
 
 .kicker {
   margin: 0 0 1.25rem;
-  color: var(--muted);
-  font-size: 0.72rem;
+  color: var(--faint);
+  font-size: 0.8rem;
 }
 
 .lede {
@@ -391,10 +391,10 @@ p {
   border: 0;
   background: transparent;
   color: inherit;
-  opacity: 0.7;
+  opacity: 1;
   font-family: var(--mono);
-  font-size: 0.72rem;
-  font-weight: 400;
+  font-size: 0.8rem;
+  font-weight: 500;
   letter-spacing: 0.04em;
 }
 
@@ -481,10 +481,10 @@ p {
 
 .toolbar p {
   margin: 0;
-  color: var(--muted);
+  color: var(--faint);
   font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -555,10 +555,10 @@ p {
   right: 1rem;
   top: 0.85rem;
   margin: 0;
-  color: rgb(245 242 236 / 10%);
+  color: var(--faint);
   font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
 }
 
 .badges {
@@ -619,7 +619,7 @@ p {
 .stamp {
   margin-top: 0.85rem;
   color: var(--faint);
-  font-size: 0.68rem;
+  font-size: 0.8rem;
 }
 
 .stamp {
@@ -649,13 +649,46 @@ p {
 .case-banner {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 0.4rem 1rem;
+  gap: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.8rem;
   border-bottom: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.68rem;
+  color: var(--faint);
+  font-size: 0.8rem;
+}
+
+.case-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.case-actions p {
+  margin: 0;
+}
+
+.case-banner a[data-share] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.95rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  transition:
+    background 0.2s var(--ease),
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.case-banner a[data-share]:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
 }
 
 .case-banner p {
@@ -664,11 +697,21 @@ p {
 
 .facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: 0;
+  grid-template-columns: max-content max-content max-content minmax(12.5rem, 1.5fr) max-content;
+  column-gap: 1.35rem;
   margin: 2rem 0 1.5rem;
   padding: 0;
   border-top: 1px solid var(--line);
+}
+
+@media (max-width: 720px) {
+  .facts {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .facts dd {
+    white-space: normal;
+  }
 }
 
 .facts div {
@@ -680,8 +723,8 @@ p {
   margin: 0;
   color: var(--faint);
   font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -689,6 +732,7 @@ p {
   margin: 0.3rem 0 0;
   font-size: 1.05rem;
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .exhibits {
@@ -713,7 +757,7 @@ p {
   top: 1.45rem;
   color: var(--red);
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   letter-spacing: 0.08em;
 }
 
@@ -723,8 +767,8 @@ p {
   gap: 0.45rem;
   color: var(--blue);
   font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
   text-decoration: none;
   text-transform: uppercase;
 }
